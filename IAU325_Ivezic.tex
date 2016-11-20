@@ -8,12 +8,13 @@
 
 \documentclass{iau}
 \usepackage{graphicx}
+\usepackage[T1]{fontenc}
 
 \title[Everything we’d like to do with LSST data, but we don’t know (yet) how] %% give here short title %%
 {Everything we'd like to do with LSST data, but we don't know (yet) how}
 
-\author[Ivezi\'{c}, Connolly\'{c} \& Juri\'{c}]   %% give here short author list %%
-{\v{Z}eljko Ivezi\'{c}$^1$, Andrew J. Connolly$^1$ \& Mario Juri\'{c}$^1$
+\author[Ivezi\'{c}, Konoli, \& Juri\'{c}]   %% give here short author list %%
+{\v{Z}eljko Ivezi\'{c}$^1$, Endrju \DJ{}. Konoli$^1$ \& Mario Juri\'{c}$^1$
 }
 
 \affiliation{
@@ -71,8 +72,9 @@ The system, with an 8.4m (6.4m effective) primary mirror, a 9.6 deg$^2$ field
 of view, and a 3.2 Gigapixel camera, will allow, on average, about 10,000 deg$^2$ of sky to be covered 
 using pairs of 15-second exposures in two photometric bands every three nights, 
 with a typical 5$\sigma$ depth for point sources of $r\sim24.5$. The system is designed to 
-yield high image quality as well as superb astrometric and photometric accuracy\footnote{For 
-detailed specifications, please see the LSST Science Requirements Document, http://ls.st/srd}. 
+yield high image quality as well as superb astrometric and photometric accuracy \footnote{For 
+detailed specifications, please see the LSST Overview Paper,
+\cite{Ivezic08LSST}, and the LSST Science Requirements Document, http://ls.st/srd}. 
 The survey area will cover 30,000 deg$^2$ with $\delta<+34.5^\circ$, and will be imaged multiple times in six bands, $ugrizy$, covering the wavelength range 320--1050 nm. About 90\% of the 
 observing time will be devoted to a deep-wide-fast survey mode which will observe an
 18,000 deg$^2$ region over 800 times (summed over all six bands) during the anticipated 
@@ -134,7 +136,7 @@ LSST data analysis challenges, representative of the era of Big Data, include:
 \item Unreliable quantities (e.g. unknown systematics and random errors)
 \end{itemize}
 
-{\it Everything we’d like to do with LSST data, but we don’t know
+{\it Everything we'd like to do with LSST data, but we don’t know
   (yet) how} is a catchy title but somewhat inaccurate. First, we most
 certainly do not include here ``everything'', and second, we and our
 LSST colleagues already have at least some ideas for how to approach
@@ -407,13 +409,24 @@ community.
 
 \subsection{LSST System Enhancements and New Algorithms}
 
-LSST is a major investment and even marginal improvement in its
-performance (both hardware and software) can yield significant science
-returns. While some of the open issues listed below are already
-addressed to some extent both within and outside the LSST construction
-project, in all cases substantial development work remains to be
-done. Again, these are simply the most obvious examples and the list
-is by no means complete.
+LSST is an automated {\em facility} that will deliver not only raw images, 
+but also fully reduced data products (calibrated single-epoch images,
+multiple flavors of co-adds, and a variety of catalogs). Its cadence will 
+be optimized to enable a balanced science return across the four key science
+areas (Section~\ref{sec:lsst}). Its products have been designed to enable the
+derivation of a large fraction of those results, without the need to fully
+understand the details of the LSST instrument, algorithms, or to begin
+from raw pixel data.
+
+To make this possible, the LSST project is making a major investment in
+computing infrastructure, software, and processing algorithms.  Yet it is
+quite clear that more and better are always possible; even marginal
+improvement in performance (of both hardware and software) could yield
+significant additional science returns.  While {\em some} of the open issues
+listed below are already being addressed by groups both within and outside
+the LSST construction project, substantial further research could be done.
+
+Again, these are simply the most obvious examples; the list is by no means complete.
 
 \begin{itemize}
 \item Observing strategy (cadence) optimization can yield improvements
@@ -422,29 +435,51 @@ is by no means complete.
   patterns (Delgado et al. 2014). It is, therefore, important to
   develop a scheduling algorithm that can efficiently address
   potential evolution of the LSST observing system and evolution of
-  its science drivers.
-\item Shift-n-add algorithm, for co-adding images along arbitrary
-  space-time trajectories, that could be efficiently deployed for
-  large datasets would likely have a major impact on outer Solar
-  System science.
+  its science drivers. The LSST Project will develop a scheduling algorithm
+  that meets the survey requirements, but the complexity of the problem and
+  the potential return on investment\footnote{e.g., just 1\% effective improvement
+  in LSST scheduling is roughly equivalent to $\sim4$\$M in operational cost.}
+  argues for further research.
+\item LSST does not plan to deliver specialized crowded field reductions
+  or catalogs; images of crowded regions of the Milky Way will be
+  processed with the same code utilized elsewhere, but perhaps with
+  different priors used in object detection and deblending stages (i.e., to
+  a very good approximation, every object observed towards the Galactic
+  center is a star). A purpose-built (multi-epoch capable) crowded field
+  code capable of dealing with LSST source densities and data volumes
+  would tremendously enhance the value of LSST's Galactic data set.
+\item No LSST data products have been explicitly designed to enable the
+  detection and characterization of diffuse (e.g., ISM) or extremely
+  low-surface brightness structures (e.g., LSB galaxies recently discovered
+  by projects such as Dragonfly). Developing specialized codes to enable this
+  type of processing may add significant value to the data set
+  collected by LSST.
 \item Complex galaxy models (e.g. tidal tails of merged galaxies) will
-  not be fit by standard (data release) LSST pipelines and such a tool
+  not be fit by standard (data release) LSST pipelines. Such a tool
   would greatly help in understanding gravitational potential around
   judiciously selected galaxies.
-\item While there are well developed methods for the classification of light curves of variable stars
-(e.g. Richards et al. 2011), transient classification with sparse data is a much harder problem. 
 \item Forward modeling of images on per visit basis (termed Multifit
   in LSST Data Management context) is superior to analysis of co-added
-  images (because of varying observing conditions). While there is
+  images (because of varying observing conditions).  A particularly
+  intersting problem is one of simultaneous forward modelling of data
+  from {\em different} data sets (e.g., LSST and WFIRST). While there is
   substantial ongoing development (e.g. the Tractor code, see Lang et
-  al. 2016), including LSST construction, many statistical and other
-  issues remain open and will require substantial further research to
-  find optimal approach.
+  al. 2016), including within LSST Project (e.g., Bosch et al., ???),
+  many statistical and other issues remain open and will require
+  substantial further research to find the optimal approach.
 \item At the required precision level, the LSST point spread function
   (PSF) will depend on time, instrument state, source position, and
   source color (more precisely, on in-band SED shape) , see Meyers \&
   Burchat (2015). Robust and precise determination of the PSF will
-  therefore be a rather non-trivial undertaking.
+  therefore be a rather non-trivial undertaking. LSST project is
+  required to characterize the PSF to the degree described in the SRD,
+  but further improvements may be possible.
+\item Shift-and-stack algorithm, for co-adding images along arbitrary
+  space-time trajectories, that could be efficiently deployed for
+  large datasets would likely have a major impact on outer Solar
+  System science. LSST Data Manageent system will not deliver
+  shift-and-stack pipelines or data products, but these could be easily
+  built on top of the open source code LSST DM will deliver.
 \item Image differencing will be used to detect transient sources in
   LSST data stream (transients will be reported within 60 seconds from
   closing the shutter). In order to control the false positive rate,
@@ -452,21 +487,48 @@ is by no means complete.
   for varying observing conditions (e.g. the treatment of differential
   chromatic refraction effects due to varying airmass, and the
   color-dependent PSFs). At the same time, they will need to be fast
-  enough to meet the 60 seconds processing time limit.
+  enough to meet the 60 seconds processing time limit. The LSST project
+  is developing these to enable its code deliverables, but broader
+  research in this earea would always be welcome.
 \item The SEDs of newly discovered transients will be poorly known (at least early after their discovery).
 It is not clear yet what characterization and classification algorithms would be the best for separating 
-most interesting transients that require prompt followup from the background of much more numerous
+the most interesting transients that require prompt followup from the background of much more numerous
 transients which can be analyzed on much longer timescales without significant loss of science outcome.
-\item Incorporating data from other surveys (e.g., Gaia, Euclid, WFIRST) in LSST data processing would
-certainly improve the resulting data products (for details see, e.g., Jain et al. 2015). It is not clear, however,
+\item While there are well developed methods for the classification of light curves of variable stars
+(e.g. Richards et al. 2011), transient classification with sparse data is a much harder problem. 
+\item Jointly processing data from LSST and other surveys (e.g., Euclid or WFIRST) would
+certainly result in a superior data set than the one produced individually
+by either of these great projects (for details see, e.g., Jain et al. 2015). It is not clear, however,
 how exactly to implement these ideas in practice, especially given that the survey overlap will be 
-significantly truncated (either by position on the sky, e.g., for WFIRST, or by brightness, e.g. for Gaia). 
+significantly truncated (either by position on the sky, e.g., for WFIRST, or by brightness, e.g. for Gaia).
+\item Finally, LSST data processing will be performed in the context of a
+relatively traditional HPC-like computing facility utilizing proven, low-risk,
+technologies (e.g., HT Condor, Pegasus). Similarly, LSST catalog data will be served
+to the users by way of relational databases (albeit of advanced, distributed, kind). Research into 
+alternative models of processing (e.g., making use of the public cloud or workflow 
+systems like Apache Spark) or data storage and serving (e.g., no-SQL
+databases, or next-generation experiments such as SciSQL) would be of great interest.
+If successful, these efforts could significantly enhance the ability of the community
+to perform affordable large-scale catalog computations or even {\em ab-initio}
+from-pixels reprocessings.\\
 \end{itemize}
 
-Many of these use cases are a great example of the BYOC (``bring your own code'') concept 
-that will be implemented within the context of LSST Data Management Level 3 user support. 
+A number of use cases above may be possible for the users to
+run at the LSST Data Access Center. LSST has reserved approximately 10\% of
+its total capacity to enable end-user analyses and generation of added value
+data products.
 
+Furthermore, many of the use cases would be best tackled by enhancing
+existing LSST pipelines or building completely new functionality on top of
+the one already provided by LSST. All of the source code for the LSST
+pipelines will be publically available, enabling these kinds of endeavors.
 
+Finally, LSST Operations have been built with the assumption that, in
+addition to the work within the facility, the community will make new
+discoveries and breakthroughs in areas of algorithms and data products.
+Such enhancements, developed by the community, can be incorporated into
+standard LSST processing becoming a part of the official LSST alert
+streams and/or data releases.
 
 \section{Discussion}
 
